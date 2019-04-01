@@ -1,0 +1,36 @@
+type User {
+  id: ID! # the primary partition key in DynamoDB
+  name: String!
+  email: String!
+  password: String!
+}
+
+type Query {
+  listUsers: [User]
+}
+
+input PutUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input DeleteUserInput {
+  id: ID!
+}
+
+type Mutation {
+  createUser(input: PutUserInput): User
+  deleteUser(input: DeleteUserInput): User
+}
+
+type Subscription {
+  onCreateUser: User
+  @aws_subscribe(mutations: ["createUser"])
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
